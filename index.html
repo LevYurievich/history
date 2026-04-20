@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>История 6 класс: Мастер Терминов</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Philosopher:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #fdf6e3;
+            --primary-dark: #2c3e50;
+            --accent-gold: #b8860b;
+            --success-green: #27ae60;
+            --error-red: #c0392b;
+            --text-main: #34495e;
+            --card-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        * { 
+            box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-color);
+            background-image: url("https://www.transparenttextures.com/patterns/parchment.png");
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        header {
+            background: var(--primary-dark);
+            color: #fff;
+            padding: 12px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        h1 {
+            margin: 0;
+            font-family: 'Philosopher', sans-serif;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+        }
+
+        .header-controls {
+            max-width: 800px;
+            margin: 8px auto 0;
+            display: none;
+            flex-direction: column;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .progress-wrapper {
+            width: 100%;
+            background: rgba(255,255,255,0.2);
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        #progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #d4af37, #f1c40f);
+            transition: width 0.4s ease;
+        }
+
+        .header-btns {
+            display: flex;
+            gap: 8px;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .btn-mini {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: #fff;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            flex: 1;
+            max-width: 140px;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 15px;
+        }
+
+        .game-card {
+            background: #fff;
+            width: 100%;
+            max-width: 700px;
+            padding: 25px 15px;
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            border: 3px solid var(--accent-gold);
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        #start-screen { text-align: center; }
+
+        .terms-list-container {
+            text-align: left;
+            max-height: 50vh;
+            overflow-y: auto;
+            margin: 15px 0;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 12px;
+            border: 1px solid #eee;
+            font-size: 0.9rem;
+        }
+
+        .term-item {
+            margin-bottom: 10px;
+            line-height: 1.4;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .term-item:last-child { border: none; }
+
+        .term-name {
+            font-weight: 700;
+            color: var(--accent-gold);
+        }
+
+        #quiz-content {
+            display: none;
+            text-align: center;
+        }
+
+        .q-meta {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: var(--accent-gold);
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .q-text {
+            font-family: 'Philosopher', sans-serif;
+            font-size: 1.25rem;
+            margin-bottom: 20px;
+            line-height: 1.3;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .btn-option {
+            background: #fff;
+            border: 2px solid #eee;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            color: var(--text-main);
+            width: 100%;
+            transition: transform 0.1s;
+        }
+
+        .btn-option:active { transform: scale(0.98); }
+
+        .scramble-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .word-slots {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 6px;
+            min-height: 50px;
+            padding: 10px;
+            background: #fdfcf0;
+            border-radius: 10px;
+            border: 2px dashed #dcd6c0;
+        }
+
+        .slot {
+            width: 34px;
+            height: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff;
+            border-bottom: 2px solid var(--accent-gold);
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .letters-pool {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .letter-btn {
+            min-width: 38px;
+            height: 38px;
+            padding: 0 8px;
+            background: var(--primary-dark);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .letter-btn.used { visibility: hidden; pointer-events: none; }
+
+        .final-screen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .btn-main {
+            padding: 14px 30px;
+            background: var(--accent-gold);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(184, 134, 11, 0.3);
+            margin-top: 15px;
+        }
+
+        /* модальное окно сброса */
+        #modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-card {
+            background: #fff;
+            padding: 25px;
+            border-radius: 15px;
+            max-width: 320px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .modal-btns {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn-modal {
+            flex: 1;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .btn-confirm { background: var(--error-red); color: white; }
+        .btn-cancel { background: #eee; }
+
+        .emoji-particle {
+            position: fixed;
+            top: -50px;
+            font-size: 2rem;
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        @media (min-width: 601px) {
+            h1 { font-size: 1.6rem; }
+            .header-controls { flex-direction: row; padding: 0 20px; }
+            .q-text { font-size: 1.5rem; }
+            .slot { width: 42px; height: 42px; font-size: 1.3rem; }
+            .letter-btn { min-width: 44px; height: 44px; font-size: 1.2rem; }
+            .btn-mini { padding: 8px 15px; font-size: 0.75rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>🏰 Хроники Истории: 6 Класс</h1>
+    <div class="header-controls" id="header-controls">
+        <div class="progress-wrapper">
+            <div id="progress-bar"></div>
+        </div>
+        <div class="header-btns">
+            <button class="btn-mini" onclick="showStartScreen()">📖 Словарь</button>
+            <button class="btn-mini" style="border-color: #e74c3c" onclick="openResetModal()">🔄 Сброс</button>
+        </div>
+    </div>
+</header>
+
+<main>
+    <div class="game-card">
+        <div id="start-screen">
+            <h2 id="start-title" style="font-family: 'Philosopher';">Готов к испытанию?</h2>
+            <p id="start-desc" style="font-size: 0.9rem;">привет, мы здесь, чтобы повторить исторические термины:</p>
+            <div class="terms-list-container" id="terms-list"></div>
+            <button class="btn-main" id="start-btn" onclick="startGame()">Начать тест</button>
+        </div>
+
+        <div id="quiz-content">
+            <div id="q-category" class="q-meta">формат: обучение</div>
+            <div id="q-title" class="q-text">загрузка...</div>
+            <div id="interaction-area"></div>
+        </div>
+
+        <div id="final-content" class="final-screen">
+            <h2 style="font-family: 'Philosopher'; font-size: 2rem;">Триумф!</h2>
+            <p>вы успешно изучили все исторические термины.</p>
+            <p id="final-stats" style="font-weight: bold;"></p>
+            <button class="btn-main" onclick="resetGame()">Начать сначала</button>
+        </div>
+    </div>
+</main>
+
+<div id="modal-overlay">
+    <div class="modal-card">
+        <h3>Сбросить прогресс?</h3>
+        <p style="font-size: 0.9rem; color: #666;">вы вернетесь в начало словаря и статистика обнулится.</p>
+        <div class="modal-btns">
+            <button class="btn-modal btn-cancel" onclick="closeResetModal()">Отмена</button>
+            <button class="btn-modal btn-confirm" onclick="confirmResetAction()">Да, сбросить</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const TERMS_DATA = [
+        { t: "Подсечно-огневая система земледелия", d: "система, при которой вырубались деревья, сжигались, а пепел служил удобрением" },
+        { t: "перелог", d: "способ земледелия, при котором участок земли использовался до истощения, а затем забрасывался" },
+        { t: "двухполье", d: "система, при которой половина пашни засевалась, а вторая «отдыхала» под паром" },
+        { t: "трехполье", d: "система земледелия с чередованием яровых, озимых культур и «отдыхающего» поля" },
+        { t: "натуральное хозяйство", d: "тип хозяйства, где продукты производятся для собственного потребления, а не для продажи" },
+        { t: "рынок", d: "место розничной и оптовой торговли, где происходит обмен товаров на деньги" },
+        { t: "город", d: "крупный населенный пункт, являющийся центром ремесла, торговли и управления" },
+        { t: "дань", d: "натуральный или денежный сбор с покоренных племен и народов" },
+        { t: "полюдье", d: "объезд князем и дружиной подвластных земель для сбора дани" },
+        { t: "монархия", d: "форма правления, при которой высшая власть принадлежит одному человеку и передается по наследству" },
+        { t: "республика", d: "форма правления, при которой органы власти выбираются на определенный срок" },
+        { t: "князь", d: "глава государства или отдельного владения у славян" },
+        { t: "вече", d: "народное собрание на Руси для решения важных государственных дел" },
+        { t: "посадник", d: "высшее должностное лицо в Новгороде или Пскове, избиравшееся из бояр на вече" },
+        { t: "воевода", d: "военачальник, правитель города или области на Руси" },
+        { t: "тысяцкий", d: "должностное лицо, возглавлявшее городское ополчение (тысячу)" },
+        { t: "бояре", d: "высший слой знати на Руси, владельцы вотчин и советники князя" },
+        { t: "дружина", d: "вооруженный отряд при князе, участвовавший в войнах и управлении государством" },
+        { t: "смерды", d: "свободные или зависимые крестьяне-общинники в Древней Руси" },
+        { t: "закупы", d: "люди, взявшие у землевладельца ссуду (купу) и обязанные её отработать" },
+        { t: "холопы", d: "самая бесправная категория населения, фактически рабы" },
+        { t: "язычество", d: "религиозные верования, основанные на поклонении многим богам (многобожие)" },
+        { t: "христианство", d: "мировая религия, основанная на жизни и учении Иисуса Христа" },
+        { t: "православие", d: "направление в христианстве, сложившееся на востоке Римской империи" },
+        { t: "ислам", d: "мировая религия, основанная на откровениях пророка Мухаммеда" },
+        { t: "иудаизм", d: "национальная религия евреев, основанная на вере в единого Бога Яхве" },
+        { t: "митрополит", d: "высший сан в православной церкви, глава церкви на Руси до учреждения патриаршества" },
+        { t: "патриарх", d: "высший титул главы самостоятельной (автокефальной) православной церкви" },
+        { t: "десятина", d: "налог в пользу церкви, составлявший десятую часть доходов населения" },
+        { t: "раздробленность", d: "период ослабления центральной власти и распада государства на уделы" },
+        { t: "вотчина", d: "земельное владение, передававшееся по наследству от отца к сыну" },
+        { t: "поместье", d: "участок земли, дававшийся за военную службу без права продажи и наследования" },
+        { t: "крестьяне", d: "сельское население, занимающееся сельскохозяйственным трудом" },
+        { t: "барщина", d: "даровой принудительный труд зависимого крестьянина в хозяйстве землевладельца" },
+        { t: "оброк", d: "ежегодный сбор денег или продуктов с крестьян в пользу феодала" },
+        { t: "орда", d: "у монголо-татар: ставка хана или само кочевое государство" },
+        { t: "курултай", d: "съезд монгольской знати для решения важнейших государственных вопросов" },
+        { t: "тумен", d: "высшая единица монгольского войска, состоявшая из 10 тысяч всадников" },
+        { t: "нойон", d: "представитель монгольской знати, военачальник или светский феодал" },
+        { t: "баскак", d: "представитель хана на Руси для контроля за сбором дани и поведением князей" },
+        { t: "ярлык", d: "ханская грамота, дававшая право русским князьям на владение землей" },
+        { t: "выход", d: "ежегодная дань, которую русские земли платили Золотой Орде" },
+        { t: "крестоносцы", d: "рыцари-участники военно-религиозных походов под знаком креста" },
+        { t: "кормление", d: "система содержания должностных лиц за счет сборов с местного населения" }
+    ];
+
+    let state = {
+        currentIndex: 0,
+        errors: 0,
+        queue: [],
+        placedLetters: []
+    };
+
+    let audioCtx = null;
+
+    function initAudio() {
+        if (!audioCtx) {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+    }
+
+    function playBeep(type) {
+        if (!audioCtx) return;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        if (type === 'success') {
+            osc.frequency.setValueAtTime(550, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.1);
+            gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+        } else {
+            osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(80, audioCtx.currentTime + 0.2);
+            gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+        }
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.3);
+    }
+
+    function generateQueue() {
+        let q = [];
+        TERMS_DATA.forEach(item => {
+            q.push({ type: 1, term: item.t, correct: item.d });
+            q.push({ type: 2, term: item.t, correct: item.t, def: item.d });
+            q.push({ type: 3, term: item.t, def: item.d });
+        });
+        return q.sort(() => Math.random() - 0.5);
+    }
+
+    function init() {
+        const listContainer = document.getElementById('terms-list');
+        listContainer.innerHTML = '';
+        TERMS_DATA.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'term-item';
+            div.innerHTML = `<span class="term-name">${item.t}</span> - ${item.d}`;
+            listContainer.appendChild(div);
+        });
+
+        const saved = localStorage.getItem('history_6_progress');
+        if (saved) {
+            try {
+                state = JSON.parse(saved);
+                updateProgress();
+                document.getElementById('start-title').innerText = "Продолжим обучение?";
+                document.getElementById('start-btn').innerText = "Продолжить тест";
+                document.getElementById('header-controls').style.display = 'flex';
+            } catch(e) {
+                localStorage.removeItem('history_6_progress');
+            }
+        }
+    }
+
+    function showStartScreen() {
+        document.getElementById('start-screen').style.display = 'block';
+        document.getElementById('quiz-content').style.display = 'none';
+        document.getElementById('final-content').style.display = 'none';
+        
+        if (state.queue && state.queue.length > 0) {
+            document.getElementById('start-title').innerText = "Словарь терминов";
+            document.getElementById('start-desc').innerText = "вы можете повторить определения и вернуться к тесту:";
+            document.getElementById('start-btn').innerText = "Вернуться к тесту";
+        }
+    }
+
+    function startGame() {
+        initAudio();
+        if (!state.queue || state.queue.length === 0) {
+            state.queue = generateQueue();
+        }
+        document.getElementById('start-screen').style.display = 'none';
+        document.getElementById('quiz-content').style.display = 'block';
+        document.getElementById('header-controls').style.display = 'flex';
+        renderTask();
+    }
+
+    function updateProgress() {
+        if (!state.queue || state.queue.length === 0) return;
+        const percent = (state.currentIndex / state.queue.length) * 100;
+        document.getElementById('progress-bar').style.width = percent + '%';
+    }
+
+    function renderTask() {
+        if (!state.queue || state.currentIndex >= state.queue.length) {
+            showFinal();
+            return;
+        }
+
+        updateProgress();
+        const task = state.queue[state.currentIndex];
+        const title = document.getElementById('q-title');
+        const cat = document.getElementById('q-category');
+        const area = document.getElementById('interaction-area');
+        area.innerHTML = '';
+
+        if (task.type === 1) {
+            cat.innerText = "формат: выбор определения";
+            title.innerText = task.term;
+            renderOptions(generateDistractors(task.correct, 'd'), task.correct, area);
+        } else if (task.type === 2) {
+            cat.innerText = "формат: пропущенное слово";
+            title.innerText = `«... - это ${task.def}»`;
+            renderOptions(generateDistractors(task.correct, 't'), task.correct, area);
+        } else if (task.type === 3) {
+            cat.innerText = "формат: сборка термина";
+            title.innerText = task.def;
+            setupScramble(task.term, area);
+        }
+        localStorage.setItem('history_6_progress', JSON.stringify(state));
+    }
+
+    function generateDistractors(correct, key) {
+        const others = TERMS_DATA.filter(i => i[key] !== correct).map(i => i[key]);
+        const res = [correct];
+        while (res.length < 4 && res.length < others.length + 1) {
+            const r = others[Math.floor(Math.random() * others.length)];
+            if (!res.includes(r)) res.push(r);
+        }
+        return res.sort(() => Math.random() - 0.5);
+    }
+
+    function renderOptions(options, correct, container) {
+        const grid = document.createElement('div');
+        grid.className = 'options-container';
+        options.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.className = 'btn-option';
+            btn.innerText = opt;
+            btn.onclick = () => {
+                if (opt === correct) {
+                    playBeep('success');
+                    btn.style.background = 'var(--success-green)';
+                    btn.style.color = '#fff';
+                    btn.style.borderColor = 'var(--success-green)';
+                    setTimeout(() => { state.currentIndex++; renderTask(); }, 500);
+                } else {
+                    playBeep('error');
+                    state.errors++;
+                    btn.style.background = 'var(--error-red)';
+                    btn.style.color = '#fff';
+                    btn.style.borderColor = 'var(--error-red)';
+                    setTimeout(() => { btn.style.background = ''; btn.style.color = ''; btn.style.borderColor = ''; }, 500);
+                }
+            };
+            grid.appendChild(btn);
+        });
+        container.appendChild(grid);
+    }
+
+    function setupScramble(word, container) {
+        const clean = word.replace(/\s/g, '').toUpperCase();
+        const letters = clean.split('').map((l, i) => ({ char: l, id: i })).sort(() => Math.random() - 0.5);
+        state.placedLetters = [];
+
+        const wrapper = document.createElement('div');
+        wrapper.className = 'scramble-container';
+
+        const slotsDiv = document.createElement('div');
+        slotsDiv.className = 'word-slots';
+
+        const poolDiv = document.createElement('div');
+        poolDiv.className = 'letters-pool';
+
+        const updateUI = () => {
+            slotsDiv.innerHTML = '';
+            for (let i = 0; i < clean.length; i++) {
+                const s = document.createElement('div');
+                s.className = 'slot';
+                const placed = state.placedLetters[i];
+                if (placed) {
+                    s.innerText = placed.char;
+                    s.onclick = () => {
+                        const btn = document.getElementById(`l-btn-${placed.id}`);
+                        if (btn) btn.classList.remove('used');
+                        state.placedLetters.splice(i, 1);
+                        updateUI();
+                    };
+                }
+                slotsDiv.appendChild(s);
+            }
+
+            if (state.placedLetters.length === clean.length) {
+                const finalStr = state.placedLetters.map(p => p.char).join('');
+                if (finalStr === clean) {
+                    playBeep('success');
+                    setTimeout(() => { state.currentIndex++; renderTask(); }, 600);
+                } else {
+                    playBeep('error');
+                    state.errors++;
+                    setTimeout(() => {
+                        state.placedLetters = [];
+                        document.querySelectorAll('.letter-btn').forEach(b => b.classList.remove('used'));
+                        updateUI();
+                    }, 500);
+                }
+            }
+        };
+
+        letters.forEach(item => {
+            const b = document.createElement('button');
+            b.className = 'letter-btn';
+            b.id = `l-btn-${item.id}`;
+            b.innerText = item.char;
+            b.onclick = () => {
+                if (state.placedLetters.length < clean.length) {
+                    state.placedLetters.push({ char: item.char, id: item.id });
+                    b.classList.add('used');
+                    updateUI();
+                }
+            };
+            poolDiv.appendChild(b);
+        });
+
+        wrapper.appendChild(slotsDiv);
+        wrapper.appendChild(poolDiv);
+        container.appendChild(wrapper);
+        updateUI();
+    }
+
+    function showFinal() {
+        document.getElementById('quiz-content').style.display = 'none';
+        document.getElementById('final-content').style.display = 'flex';
+        document.getElementById('final-stats').innerText = `ошибок допущено: ${state.errors}`;
+        localStorage.removeItem('history_6_progress');
+        
+        const emojis = ['🏰', '⚔️', '🛡️', '👑', '📜'];
+        for (let i = 0; i < 40; i++) {
+            setTimeout(() => {
+                const p = document.createElement('div');
+                p.className = 'emoji-particle';
+                p.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+                p.style.left = Math.random() * 100 + 'vw';
+                p.style.transition = `all ${2 + Math.random() * 2}s linear`;
+                document.body.appendChild(p);
+                setTimeout(() => { p.style.transform = `translateY(${window.innerHeight + 100}px) rotate(360deg)`; }, 50);
+                setTimeout(() => p.remove(), 4000);
+            }, i * 80);
+        }
+    }
+
+    function openResetModal() {
+        document.getElementById('modal-overlay').style.display = 'flex';
+    }
+
+    function closeResetModal() {
+        document.getElementById('modal-overlay').style.display = 'none';
+    }
+
+    function confirmResetAction() {
+        closeResetModal();
+        resetGame();
+    }
+
+    function resetGame() {
+        localStorage.removeItem('history_6_progress');
+        state = {
+            currentIndex: 0,
+            errors: 0,
+            queue: [],
+            placedLetters: []
+        };
+        
+        document.getElementById('start-title').innerText = "Готов к испытанию?";
+        document.getElementById('start-desc').innerText = "привет, мы здесь, чтобы повторить исторические термины:";
+        document.getElementById('start-btn').innerText = "Начать тест";
+        document.getElementById('header-controls').style.display = 'none';
+        document.getElementById('progress-bar').style.width = '0%';
+        
+        showStartScreen();
+    }
+
+    window.onload = init;
+</script>
+</body>
+</html>
